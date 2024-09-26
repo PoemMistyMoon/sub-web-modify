@@ -201,7 +201,6 @@
                     @click="makeShortUrl"
                     :loading="loading1"
                     :disabled="customSubUrl.length === 0"
-                 <br>
                   >自定义配置
                 </el-button>
                 <el-button
