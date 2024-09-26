@@ -217,10 +217,9 @@
                 <el-button
                     style="width: 120px"
                     type="danger"
-                    @click="makeShortUrl"
+                    @click="refreshPage"
                     :loading="loading1"
-                    :disabled="customSubUrl.length === 0"
-                >生成短链接
+                >强制刷新页面
                 </el-button>
               </el-form-item>
               <el-form-item label-width="0px" style="text-align: center">
@@ -1131,7 +1130,9 @@ export default {
       this.$copyText(this.customSubUrl);
       this.$message.success("定制订阅已复制到剪贴板");
     },
-   
+    refreshPage() {
+      location.reload(true); // 强制从服务器重新加载页面
+    }, 
     confirmUploadConfig() {
       this.loading2 = true;
       let data = new FormData();
