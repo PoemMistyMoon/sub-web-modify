@@ -1,37 +1,37 @@
 <template>
   <div>
-    <el-row tyle="margin-top: 10px">
+    <el-row style="margin-top: 10px">
       <el-col>
         <el-card>
-          <div lot="header">
-            <vg-icon cla="gayhub" icon-cla="github" tyle="float:left" @click="goToProject"/>
-            <vg-icon cla="dianbao" icon-cla="telegram" tyle="float:left;margin-left: 10px"
+          <div slot="header">
+            <svg-icon class="gayhub" icon-class="github" style="float:left" @click="goToProject"/>
+            <svg-icon class="dianbao" icon-class="telegram" style="float:left;margin-left: 10px"
                       @click="gotoTgChannel"/>
-            <vg-icon cla="bilibili" icon-cla="bilibili" tyle="float:right;margin-left:10px"
+            <svg-icon class="bilibili" icon-class="bilibili" style="float:right;margin-left:10px"
                       @click="gotoBiliBili"/>
-            <vg-icon cla="youguan" icon-cla="youtube" tyle="float:right;margin-left:10px" @click="gotoYouTuBe"/>
-            <vg-icon cla="channel" icon-cla="telegram" tyle="float:right;margin-left: 10px"
+            <svg-icon class="youguan" icon-class="youtube" style="float:right;margin-left:10px" @click="gotoYouTuBe"/>
+            <svg-icon class="channel" icon-class="telegram" style="float:right;margin-left: 10px"
                       @click="gotoTgChannel"/>
-            <div tyle="text-align:center;font-ize:15px">订 阅 转 换</div>
+            <div style="text-align:center;font-size:15px">订 阅 转 换</div>
           </div>
           <el-container>
-            <el-form :model="form" label-width="80px" label-poition="left" tyle="width: 100%">
+            <el-form :model="form" label-width="80px" label-position="left" style="width: 100%">
               <el-form-item label="订阅链接:">
                 <el-input
-                    v-model="form.ourceSubUrl"
+                    v-model="form.sourceSubUrl"
                     type="textarea"
-                    row="3"
+                    rows="3"
                     placeholder="支持各种订阅链接或单节点链接，多个链接每行一个或用 | 分隔"
                 />
               </el-form-item>
               <el-form-item label="生成类型:">
-                <el-elect v-model="form.clientType" tyle="width: 100%">
-                  <el-option v-for="(v, k) in option.clientType" :key="k" :label="k" :value="v"></el-option>
-                </el-elect>
+                <el-select v-model="form.clientType" style="width: 100%">
+                  <el-option v-for="(v, k) in options.clientTypes" :key="k" :label="k" :value="v"></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="后端地址:">
-                <el-elect
-                    v-model="form.cutomBackend"
+                <el-select
+                    v-model="form.customBackend"
                     allow-create
                     filterable
                     @change="selectChanged"
@@ -193,15 +193,15 @@
                   </el-button>
                 </el-input>
               </el-form-item>
-           <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
+            <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
                 <el-button
-                    style="width: 250px"
+                    style="width: 120px"
                     type="danger"
                     @click="makeUrl"
                     :disabled="form.sourceSubUrl.length === 0 || btnBoolean"
                 >生成订阅链接
                 </el-button>
-               
+                
               <el-form-item label-width="0px" style="text-align: center">
                 <el-button
                     style="width: 120px"
