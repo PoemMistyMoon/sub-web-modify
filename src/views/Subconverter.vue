@@ -193,15 +193,36 @@
                   </el-button>
                 </el-input>
               </el-form-item>
-            <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
+              <el-form-item label="订阅短链:">
+                <el-input class="copy-content" v-model="customShortSubUrl"
+                          placeholder="输入自定义短链接后缀，点击生成短链接可反复生成">
+                  <el-button
+                      slot="append"
+                      v-clipboard:copy="customShortSubUrl"
+                      v-clipboard:success="onCopy"
+                      ref="copy-btn"
+                      icon="el-icon-document-copy"
+                  >复制
+                  </el-button>
+                </el-input>
+              </el-form-item>
+              <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
                 <el-button
-                    style="width: 250px"
+                    style="width: 120px"
                     type="danger"
                     @click="makeUrl"
                     :disabled="form.sourceSubUrl.length === 0 || btnBoolean"
                 >生成订阅链接
                 </el-button>
-                
+                <el-button
+                    style="width: 120px"
+                    type="danger"
+                    @click="makeShortUrl"
+                    :loading="loading1"
+                    :disabled="customSubUrl.length === 0"
+                >生成短链接
+                </el-button>
+              </el-form-item>
               <el-form-item label-width="0px" style="text-align: center">
                 <el-button
                     style="width: 120px"
