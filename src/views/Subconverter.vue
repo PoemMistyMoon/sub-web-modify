@@ -4,13 +4,13 @@
       <el-col>
         <el-card>
           <div slot="header">
-            <vg-icon class="gayhub" icon-class="github" style="float:left" @click="goToProject"/>
-            <vg-icon class="dianbao" icon-class="telegram" style="float:left;margin-left: 10px"
+            <svg-icon class="gayhub" icon-class="github" style="float:left" @click="goToProject"/>
+            <svg-icon class="dianbao" icon-class="telegram" style="float:left;margin-left: 10px"
                       @click="gotoTgChannel"/>
-            <vg-icon class="bilibili" icon-class="bilibili" style="float:right;margin-left:10px"
+            <svg-icon class="bilibili" icon-class="bilibili" style="float:right;margin-left:10px"
                       @click="gotoBiliBili"/>
-            <vg-icon class="youguan" icon-class="youtube" style="float:right;margin-left:10px" @click="gotoYouTuBe"/>
-            <vg-icon class="channel" icon-class="telegram" style="float:right;margin-left: 10px"
+            <svg-icon class="youguan" icon-class="youtube" style="float:right;margin-left:10px" @click="gotoYouTuBe"/>
+            <svg-icon class="channel" icon-class="telegram" style="float:right;margin-left: 10px"
                       @click="gotoTgChannel"/>
             <div style="text-align:center;font-size:15px">订 阅 转 换</div>
           </div>
@@ -38,10 +38,10 @@
                     placeholder="可输入自己的后端"
                     style="width: 100%"
                 >
-  
-                  <el-option v-for="(v, k) in options.shortTypes" :key="k" :label="k" :value="v"></el-option>
+                  <el-option v-for="(v, k) in options.customBackend" :key="k" :label="k" :value="v"></el-option>
                 </el-select>
               </el-form-item>
+             
               <el-form-item label="远程配置:">
                 <el-select
                     v-model="form.remoteConfig"
@@ -196,14 +196,14 @@
             
               <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
                 <el-button
-                    style="width: 120px"
+                    style="width: 250px"
                     type="danger"
                     @click="makeUrl"
                     :disabled="form.sourceSubUrl.length === 0 || btnBoolean"
                 >生成订阅链接
                 </el-button>
                 <el-button
-                    style="width: 250px"
+                    style="width: 120px"
                     type="danger"
                     @click="makeShortUrl"
                     :loading="loading1"
@@ -335,120 +335,127 @@
             <el-form-item prop="uploadFilter">
               <el-input
                   v-model="uploadFilter"
-                  placeholder="本功能暂停使用，如有兴趣，自行去我的GitHub参考sub-web-api项目部署！"
+                  placeholder="本功能暂停使用，如有兴趣，自行去我的GitHub参考ub-web-api项目部署！"
                   type="textarea"
-                  :autosize="{ minRows: 15, maxRows: 15}"
+                  :autoize="{ minRow: 15, maxRow: 15}"
                   maxlength="50000"
-                  show-word-limit
+                  how-word-limit
               ></el-input>
             </el-form-item>
           </el-form>
-          <div style="float: right">
-            <el-button type="primary" @click="uploadFilter = ''; dialogUploadConfigVisible = false">取 消</el-button>
+          <div tyle="float: right">
+            <el-button type="primary" @click="uploadFilter = ''; dialogUploadConfigViible = fale">取 消</el-button>
             <el-button
                 type="primary"
                 @click="confirmUploadScript"
-                :disabled="uploadFilter.length === 0"
+                :diabled="uploadFilter.length === 0"
             >确 定
             </el-button>
           </div>
         </el-tab-pane>
-      </el-tabs>
+      </el-tab>
     </el-dialog>
     <el-dialog
-        :visible.sync="dialogLoadConfigVisible"
-        :show-close="false"
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
+        :viible.ync="dialogLoadConfigViible"
+        :how-cloe="fale"
+        :cloe-on-click-modal="fale"
+        :cloe-on-pre-ecape="fale"
         width="80%"
     >
-      <div slot="title">
+      <div lot="title">
         可以从生成的链接中解析信息,填入页面中去
       </div>
-      <el-form label-position="left">
+      <el-form label-poition="left">
         <el-form-item prop="uploadConfig">
           <el-input
               v-model="loadConfig"
               type="textarea"
-              :autosize="{ minRows: 15, maxRows: 15}"
+              :autoize="{ minRow: 15, maxRow: 15}"
               maxlength="5000"
-              show-word-limit
+              how-word-limit
           ></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="loadConfig = ''; dialogLoadConfigVisible = false">取 消</el-button>
+      <div lot="footer" cla="dialog-footer">
+        <el-button type="primary" @click="loadConfig = ''; dialogLoadConfigViible = fale">取 消</el-button>
         <el-button
             type="primary"
             @click="confirmLoadConfig"
-            :disabled="loadConfig.length === 0"
+            :diabled="loadConfig.length === 0"
         >确 定
         </el-button>
       </div>
     </el-dialog>
   </div>
 </template>
-<script>
-const project = process.env.VUE_APP_PROJECT
-const configScriptBackend = process.env.VUE_APP_CONFIG_UPLOAD_BACKEND + '/api.php'
-const remoteConfigSample = process.env.VUE_APP_SUBCONVERTER_REMOTE_CONFIG
-const scriptConfigSample = process.env.VUE_APP_SCRIPT_CONFIG
-const filterConfigSample = process.env.VUE_APP_FILTER_CONFIG
-const defaultBackend = process.env.VUE_APP_SUBCONVERTER_DEFAULT_BACKEND
-const shortUrlBackend = process.env.VUE_APP_MYURLS_DEFAULT_BACKEND + '/short'
-const configUploadBackend = process.env.VUE_APP_CONFIG_UPLOAD_BACKEND + '/sub.php'
-const basicVideo = process.env.VUE_APP_BASIC_VIDEO
-const advancedVideo = process.env.VUE_APP_ADVANCED_VIDEO
-const tgBotLink = process.env.VUE_APP_BOT_LINK
-const yglink = process.env.VUE_APP_YOUTUBE_LINK
-const bzlink = process.env.VUE_APP_BILIBILI_LINK
-const downld = 'http://' + window.location.host + '/download.html'
+<cript>
+cont project = proce.env.VUE_APP_PROJECT
+cont configScriptBackend = proce.env.VUE_APP_CONFIG_UPLOAD_BACKEND + '/api.php'
+cont remoteConfigSample = proce.env.VUE_APP_SUBCONVERTER_REMOTE_CONFIG
+cont criptConfigSample = proce.env.VUE_APP_SCRIPT_CONFIG
+cont filterConfigSample = proce.env.VUE_APP_FILTER_CONFIG
+cont defaultBackend = proce.env.VUE_APP_SUBCONVERTER_DEFAULT_BACKEND
+cont hortUrlBackend = proce.env.VUE_APP_MYURLS_DEFAULT_BACKEND + '/hort'
+cont configUploadBackend = proce.env.VUE_APP_CONFIG_UPLOAD_BACKEND + '/ub.php'
+cont baicVideo = proce.env.VUE_APP_BASIC_VIDEO
+cont advancedVideo = proce.env.VUE_APP_ADVANCED_VIDEO
+cont tgBotLink = proce.env.VUE_APP_BOT_LINK
+cont yglink = proce.env.VUE_APP_YOUTUBE_LINK
+cont bzlink = proce.env.VUE_APP_BILIBILI_LINK
+cont downld = 'http://' + window.location.hot + '/download.html'
 export default {
   data() {
     return {
-      backendVersion: "",
-      centerDialogVisible: false,
-      activeName: 'first',
+      backendVerion: "",
+      centerDialogViible: fale,
+      activeName: 'firt',
       // 是否为 PC 端
-      isPC: true,
-      btnBoolean: false,
-      options: {
-        clientTypes: {
-          Clash: "clash",
-          "Surge4/5": "surge&ver=4",
-          "Sing-Box": "singbox",
+      iPC: true,
+      btnBoolean: fale,
+      option: {
+        clientType: {
+          Clah: "clah",
+          "Surge4/5": "urge&ver=4",
+          "Sing-Box": "ingbox",
           V2Ray: "v2ray",
           Trojan: "trojan",
-          ShadowsocksR: "ssr",
+          ShadowockR: "r",
           "混合订阅（mixed）": "mixed",
-          Surfboard: "surfboard",
+          Surfboard: "urfboard",
           Quantumult: "quan",
           "Quantumult X": "quanx",
           Loon: "loon",
           Mellow: "mellow",
-          Surge3: "surge&ver=3",
-          Surge2: "surge&ver=2",
-          ClashR: "clashr",
-          "Shadowsocks(SIP002)": "ss",
-          "Shadowsocks Android(SIP008)": "sssub",
-          ShadowsocksD: "ssd",
+          Surge3: "urge&ver=3",
+          Surge2: "urge&ver=2",
+          ClahR: "clahr",
+          "Shadowock(SIP002)": "",
+          "Shadowock Android(SIP008)": "ub",
+          ShadowockD: "d",
           "自动判断客户端": "auto",
         },
-        customBackend: {
-          "肥羊增强型后端【vless reality+hy1+hy2】": "https://url.v1.mk",
-          "肥羊备用后端【vless reality+hy1+hy2】": "https://sub.d1.mk",
-          "つつ-多地防失联【负载均衡+国内优化】": "https://api.tsutsu.one",
-          nameless13提供: "https://www.nameless13.com",
-          subconverter作者提供: "https://sub.xeton.dev",
-          "sub-web作者提供": "https://api.wcc.best",
-          "sub作者&lhie1提供": "https://api.dler.io",
+        hortType: {
+          "v1.mk": "http://v1.mk/hort",
+          "d1.mk": "http://d1.mk/hort",
+          "dlj.tf": "http://dlj.tf/hort",
+          "uo.yt": "http://uo.yt/hort",
+          "ub.cm": "http://ub.cm/hort",
         },
-        backendOptions: [
-          {value: "https://url.v1.mk"},
-          {value: "https://sub.d1.mk"},
-          {value: "https://api.tsutsu.one"},
-          {value: "https://www.nameless13.com"},
-          {value: "https://sub.xeton.dev"},
+        cutomBackend: {
+          "肥羊增强型后端【vle reality+hy1+hy2】": "http://url.v1.mk",
+          "肥羊备用后端【vle reality+hy1+hy2】": "http://ub.d1.mk",
+          "つつ-多地防失联【负载均衡+国内优化】": "http://api.tutu.one",
+          namele13提供: "http://www.namele13.com",
+          ubconverter作者提供: "http://ub.xeton.dev",
+          "ub-web作者提供": "http://api.wcc.bet",
+          "ub作者&lhie1提供": "http://api.dler.io",
+        },
+        backendOption: [
+          {value: "http://url.v1.mk"},
+          {value: "http://ub.d1.mk"},
+          {value: "http://api.tutu.one"},
+          {value: "http://www.namele13.com"},
+          {value: "http://ub.xeton.dev"},
           {value: "https://api.wcc.best"},
           {value: "https://api.dler.io"},
         ],
@@ -923,7 +930,7 @@ export default {
       darkMedia.addEventListener('change', callback);
     } //监听系统主题，自动切换！
   },
-  methods: {
+  method: {
     selectChanged() {
       this.getBackendVersion();
     },
@@ -970,13 +977,7 @@ export default {
         window.localStorage.setItem('localTheme', 'light-mode');
       }
     },
-    tanchuang() {
-      this.$alert(`<div style="text-align:center;font-size:15px"><strong><span style="font-size:20px;color:red">apiurl.v1.mk已被蔷，请更换最新的url.v1.mk</span></strong></br><strong><span style="font-size:20px">本站官方TG交流群：</span><span><a href="https://t.me/feiyangdigital" target="_blank" style="color:red;font-size:20px;text-decoration:none">点击加入</a></span></strong></br><strong><span style="font-size:20px">IEPL高端机场（<span style="color:blue">原生支持各种流媒体</span>）：</span><span><a href="https://www.mcwy.org" style="color:red;font-size:20px;text-decoration:none">点击注册</a></span></strong></br><strong><span style="font-size:20px">奈飞、ChatGPT合租（<span style="color:blue">优惠码：feiyang</span>）：</span><span><a href="https://hezu.v1.mk/" style="color:red;font-size:20px;text-decoration:none">点击上车</a></span></strong></br><strong><span style="font-size:20px">115蓝光4K原盘内部资源群：</span><span><a href="https://115.metshop.top" target="_blank" style="color:red;font-size:20px;text-decoration:none">点击查看</a></span></strong></br><strong><span style="font-size:20px">IOS外区应用代购：</span><span><a href="https://fk.myue.club" style="color:red;font-size:20px;text-decoration:none">点击查看</a></span></strong></br>本站服务器赞助机场-牧场物语，是一家拥有BGP中继+IEPL企业级内网专线的高端机场，适合各个价位要求的用户，牧场物语采用最新的奈飞非自制剧解决方案，出口随机更换IP，确保尽可能的每个用户可以用上独立IP，以此来稳定解决奈飞非自制剧的封锁，并推出7*24小时奈飞非自制剧节点自动检测系统，用户再也不用自己手动一个个的乱试节点了，目前牧场的新加坡，台湾等节区域点均可做到24H稳定非自制剧观看！</br></div>`, '信息面板', {
-        confirmButtonText: '确定',
-        dangerouslyUseHTMLString: true,
-        customClass: 'msgbox'
-      });
-    },
+   
     onCopy() {
       this.$message.success("已复制");
     },
@@ -1112,6 +1113,25 @@ export default {
       this.$copyText(this.customSubUrl);
       this.$message.success("定制订阅已复制到剪贴板");
     },
+    makeShortUrl() {
+      let duan =
+          this.form.shortType === ""
+              ? shortUrlBackend
+              : this.form.shortType;
+      this.loading1 = true;
+      let data = new FormData();
+      data.append("longUrl", btoa(this.customSubUrl));
+      if (this.customShortSubUrl.trim() != "") {
+        data.append("shortKey", this.customShortSubUrl.trim().indexOf("http") < 0 ? this.customShortSubUrl.trim() : "");
+      }
+      this.$axios
+          .post(duan, data, {
+            header: {
+              "Content-Type": "application/form-data; charset=utf-8"
+            }
+          })
+          
+    },
     confirmUploadConfig() {
       this.loading2 = true;
       let data = new FormData();
@@ -1140,6 +1160,8 @@ export default {
           .finally(() => {
             this.loading2 = false;
           });
+    },
+    
     },
     confirmLoadConfig() {
       if (this.loadConfig.trim() === "" || !this.loadConfig.trim().includes("http")) {
