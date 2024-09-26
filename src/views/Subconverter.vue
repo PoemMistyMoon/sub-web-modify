@@ -4,13 +4,13 @@
       <el-col>
         <el-card>
           <div slot="header">
-            <svg-icon class="gayhub" icon-class="github" style="float:left" @click="goToProject"/>
-            <svg-icon class="dianbao" icon-class="telegram" style="float:left;margin-left: 10px"
+            <vg-icon class="gayhub" icon-class="github" style="float:left" @click="goToProject"/>
+            <vg-icon class="dianbao" icon-class="telegram" style="float:left;margin-left: 10px"
                       @click="gotoTgChannel"/>
-            <svg-icon class="bilibili" icon-class="bilibili" style="float:right;margin-left:10px"
+            <vg-icon class="bilibili" icon-class="bilibili" style="float:right;margin-left:10px"
                       @click="gotoBiliBili"/>
-            <svg-icon class="youguan" icon-class="youtube" style="float:right;margin-left:10px" @click="gotoYouTuBe"/>
-            <svg-icon class="channel" icon-class="telegram" style="float:right;margin-left: 10px"
+            <vg-icon class="youguan" icon-class="youtube" style="float:right;margin-left:10px" @click="gotoYouTuBe"/>
+            <vg-icon class="channel" icon-class="telegram" style="float:right;margin-left: 10px"
                       @click="gotoTgChannel"/>
             <div style="text-align:center;font-size:15px">订 阅 转 换</div>
           </div>
@@ -38,17 +38,7 @@
                     placeholder="可输入自己的后端"
                     style="width: 100%"
                 >
-                  <el-option v-for="(v, k) in options.customBackend" :key="k" :label="k" :value="v"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="短链选择:">
-                <el-select
-                    v-model="form.shortType"
-                    allow-create
-                    filterable
-                    placeholder="可输入其他可用短链API"
-                    style="width: 100%"
-                >
+  
                   <el-option v-for="(v, k) in options.shortTypes" :key="k" :label="k" :value="v"></el-option>
                 </el-select>
               </el-form-item>
@@ -203,19 +193,7 @@
                   </el-button>
                 </el-input>
               </el-form-item>
-              <el-form-item label="订阅短链:">
-                <el-input class="copy-content" v-model="customShortSubUrl"
-                          placeholder="输入自定义短链接后缀，点击生成短链接可反复生成">
-                  <el-button
-                      slot="append"
-                      v-clipboard:copy="customShortSubUrl"
-                      v-clipboard:success="onCopy"
-                      ref="copy-btn"
-                      icon="el-icon-document-copy"
-                  >复制
-                  </el-button>
-                </el-input>
-              </el-form-item>
+            
               <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
                 <el-button
                     style="width: 120px"
@@ -225,21 +203,11 @@
                 >生成订阅链接
                 </el-button>
                 <el-button
-                    style="width: 120px"
+                    style="width: 250px"
                     type="danger"
                     @click="makeShortUrl"
                     :loading="loading1"
                     :disabled="customSubUrl.length === 0"
-                >生成短链接
-                </el-button>
-              </el-form-item>
-              <el-form-item label-width="0px" style="text-align: center">
-                <el-button
-                    style="width: 120px"
-                    type="primary"
-                    @click="dialogUploadConfigVisible = true"
-                    icon="el-icon-upload"
-                    :loading="loading2"
                 >自定义配置
                 </el-button>
                 <el-button
@@ -395,7 +363,7 @@
         width="80%"
     >
       <div slot="title">
-        可以从生成的长/短链接中解析信息,填入页面中去
+        可以从生成的链接中解析信息,填入页面中去
       </div>
       <el-form label-position="left">
         <el-form-item prop="uploadConfig">
@@ -465,13 +433,6 @@ export default {
           "Shadowsocks Android(SIP008)": "sssub",
           ShadowsocksD: "ssd",
           "自动判断客户端": "auto",
-        },
-        shortTypes: {
-          "v1.mk": "https://v1.mk/short",
-          "d1.mk": "https://d1.mk/short",
-          "dlj.tf": "https://dlj.tf/short",
-          "suo.yt": "https://suo.yt/short",
-          "sub.cm": "https://sub.cm/short",
         },
         customBackend: {
           "肥羊增强型后端【vless reality+hy1+hy2】": "https://url.v1.mk",
@@ -1151,39 +1112,6 @@ export default {
       this.$copyText(this.customSubUrl);
       this.$message.success("定制订阅已复制到剪贴板");
     },
-    makeShortUrl() {
-      let duan =
-          this.form.shortType === ""
-              ? shortUrlBackend
-              : this.form.shortType;
-      this.loading1 = true;
-      let data = new FormData();
-      data.append("longUrl", btoa(this.customSubUrl));
-      if (this.customShortSubUrl.trim() != "") {
-        data.append("shortKey", this.customShortSubUrl.trim().indexOf("http") < 0 ? this.customShortSubUrl.trim() : "");
-      }
-      this.$axios
-          .post(duan, data, {
-            header: {
-              "Content-Type": "application/form-data; charset=utf-8"
-            }
-          })
-          .then(res => {
-            if (res.data.Code === 1 && res.data.ShortUrl !== "") {
-              this.customShortSubUrl = res.data.ShortUrl;
-              this.$copyText(res.data.ShortUrl);
-              this.$message.success("短链接已复制到剪贴板（IOS设备和Safari浏览器不支持自动复制API，需手动点击复制按钮）");
-            } else {
-              this.$message.error("短链接获取失败：" + res.data.Message);
-            }
-          })
-          .catch(() => {
-            this.$message.error("短链接获取失败");
-          })
-          .finally(() => {
-            this.loading1 = false;
-          });
-    },
     confirmUploadConfig() {
       this.loading2 = true;
       let data = new FormData();
@@ -1213,26 +1141,6 @@ export default {
             this.loading2 = false;
           });
     },
-    analyzeUrl() {
-      if (this.loadConfig.indexOf("target") !== -1) {
-        return this.loadConfig;
-      } else {
-        this.loading3 = true;
-        return (async () => {
-          try {
-            let response = await fetch(this.loadConfig, {
-              method: "GET",
-              redirect: "follow",
-            });
-            return response.url;
-          } catch (e) {
-            this.$message.error("解析短链接失败，请检查短链接服务端是否配置跨域：" + e)
-          } finally {
-            this.loading3 = false;
-          }
-        })();
-      }
-    },
     confirmLoadConfig() {
       if (this.loadConfig.trim() === "" || !this.loadConfig.trim().includes("http")) {
         this.$message.error("待解析的订阅链接不合法");
@@ -1241,7 +1149,7 @@ export default {
       (async () => {
         let url
         try {
-          url = new URL(await this.analyzeUrl())
+          url = new网站(await this.analyzeUrl())
         } catch (error) {
           this.$message.error("请输入正确的订阅地址!");
           return;
@@ -1334,7 +1242,7 @@ export default {
           this.form.tpl.singbox.ipv6 = param.get("singbox.ipv6") === '1';
         }
         this.dialogLoadConfigVisible = false;
-        this.$message.success("长/短链接已成功解析为订阅信息");
+        this.$message.success("链接已成功解析为订阅信息");
       })();
     },
     renderPost() {
