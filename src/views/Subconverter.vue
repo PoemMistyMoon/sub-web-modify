@@ -41,7 +41,7 @@
                   <el-option v-for="(v, k) in options.customBackend" :key="k" :label="k" :value="v"></el-option>
                 </el-select>
               </el-form-item>
-              
+             
               <el-form-item label="远程配置:">
                 <el-select
                     v-model="form.remoteConfig"
@@ -193,39 +193,36 @@
                   </el-button>
                 </el-input>
               </el-form-item>
-             
-              <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
-                <el-button
-                    style="width: 250px"
-                    type="danger"
-                    @click="makeUrl"
-                    :disabled="form.sourceSubUrl.length === 0 || btnBoolean"
-                >生成订阅链接
-                </el-button>
-                <el-button
-                    style="width: 120px"
-                    type="danger"
-                    @click="makeShortUrl"
-                    :loading="loading1"
-                    :disabled="customSubUrl.length === 0"
-                >自定义配置
-                </el-button>
-                <el-button
-                    style="width: 120px"
-                    type="primary"
-                    @click="dialogLoadConfigVisible = true"
-                    icon="el-icon-copy-document"
-                    :loading="loading3"
-                >从URL解析
-                </el-button>
-              </el-form-item>
-              <el-form-item label-width="0px" style="text-align: center">
-                <el-button
-                    style="width: 250px;"
-                    type="success"
-                    icon="el-icon-video-play"
-                    @click="centerDialogVisible = true"
-                >视频教程
+             生成订阅链接
+  </el-button>
+</el-form-item>
+
+<el-form-item label-width="0px" style="text-align: center">
+  <el-button
+      style="width: 250px; margin-right: 10px;"
+      type="primary"
+      @click="dialogUploadConfigVisible = true"
+      icon="el-icon-upload"
+  >自定义配置
+  </el-button>
+  <el-button
+      style="width: 250px;"
+      type="primary"
+      @click="dialogLoadConfigVisible = true"
+      icon="el-icon-copy-document"
+  >从URL解析
+  </el-button>
+</el-form-item>
+
+<el-form-item label-width="0px" style="text-align: center">
+  <el-button
+      style="width: 250px;"
+      type="success"
+      icon="el-icon-video-play"
+      @click="centerDialogVisible = true"
+  >播放视频
+  </el-button>
+</el-form-item>视频教程
                 </el-button>
               </el-form-item>
             </el-form>
@@ -434,7 +431,7 @@ export default {
           ShadowsocksD: "ssd",
           "自动判断客户端": "auto",
         },
-       
+        
         customBackend: {
           "肥羊增强型后端【vless reality+hy1+hy2】": "https://url.v1.mk",
           "肥羊备用后端【vless reality+hy1+hy2】": "https://sub.d1.mk",
@@ -971,7 +968,7 @@ export default {
         window.localStorage.setItem('localTheme', 'light-mode');
       }
     },
-   
+    
     onCopy() {
       this.$message.success("已复制");
     },
@@ -1137,7 +1134,7 @@ export default {
             this.loading2 = false;
           });
     },
-   
+    
     confirmLoadConfig() {
       if (this.loadConfig.trim() === "" || !this.loadConfig.trim().includes("http")) {
         this.$message.error("待解析的订阅链接不合法");
