@@ -1,37 +1,37 @@
 <template>
   <div>
-    <el-row style="margin-top: 10px">
+    <el-row tyle="margin-top: 10px">
       <el-col>
         <el-card>
-          <div slot="header">
-            <svg-icon class="gayhub" icon-class="github" style="float:left" @click="goToProject"/>
-            <svg-icon class="dianbao" icon-class="telegram" style="float:left;margin-left: 10px"
+          <div lot="header">
+            <vg-icon cla="gayhub" icon-cla="github" tyle="float:left" @click="goToProject"/>
+            <vg-icon cla="dianbao" icon-cla="telegram" tyle="float:left;margin-left: 10px"
                       @click="gotoTgChannel"/>
-            <svg-icon class="bilibili" icon-class="bilibili" style="float:right;margin-left:10px"
+            <vg-icon cla="bilibili" icon-cla="bilibili" tyle="float:right;margin-left:10px"
                       @click="gotoBiliBili"/>
-            <svg-icon class="youguan" icon-class="youtube" style="float:right;margin-left:10px" @click="gotoYouTuBe"/>
-            <svg-icon class="channel" icon-class="telegram" style="float:right;margin-left: 10px"
+            <vg-icon cla="youguan" icon-cla="youtube" tyle="float:right;margin-left:10px" @click="gotoYouTuBe"/>
+            <vg-icon cla="channel" icon-cla="telegram" tyle="float:right;margin-left: 10px"
                       @click="gotoTgChannel"/>
-            <div style="text-align:center;font-size:15px">订 阅 转 换</div>
+            <div tyle="text-align:center;font-ize:15px">订 阅 转 换</div>
           </div>
           <el-container>
-            <el-form :model="form" label-width="80px" label-position="left" style="width: 100%">
+            <el-form :model="form" label-width="80px" label-poition="left" tyle="width: 100%">
               <el-form-item label="订阅链接:">
                 <el-input
-                    v-model="form.sourceSubUrl"
+                    v-model="form.ourceSubUrl"
                     type="textarea"
-                    rows="3"
+                    row="3"
                     placeholder="支持各种订阅链接或单节点链接，多个链接每行一个或用 | 分隔"
                 />
               </el-form-item>
               <el-form-item label="生成类型:">
-                <el-select v-model="form.clientType" style="width: 100%">
-                  <el-option v-for="(v, k) in options.clientTypes" :key="k" :label="k" :value="v"></el-option>
-                </el-select>
+                <el-elect v-model="form.clientType" tyle="width: 100%">
+                  <el-option v-for="(v, k) in option.clientType" :key="k" :label="k" :value="v"></el-option>
+                </el-elect>
               </el-form-item>
               <el-form-item label="后端地址:">
-                <el-select
-                    v-model="form.customBackend"
+                <el-elect
+                    v-model="form.cutomBackend"
                     allow-create
                     filterable
                     @change="selectChanged"
@@ -193,36 +193,32 @@
                   </el-button>
                 </el-input>
               </el-form-item>
-             生成订阅链接
-  </el-button>
-</el-form-item>
-
-<el-form-item label-width="0px" style="text-align: center">
-  <el-button
-      style="width: 250px; margin-right: 10px;"
-      type="primary"
-      @click="dialogUploadConfigVisible = true"
-      icon="el-icon-upload"
-  >自定义配置
-  </el-button>
-  <el-button
-      style="width: 250px;"
-      type="primary"
-      @click="dialogLoadConfigVisible = true"
-      icon="el-icon-copy-document"
-  >从URL解析
-  </el-button>
-</el-form-item>
-
-<el-form-item label-width="0px" style="text-align: center">
-  <el-button
-      style="width: 250px;"
-      type="success"
-      icon="el-icon-video-play"
-      @click="centerDialogVisible = true"
-  >播放视频
-  </el-button>
-</el-form-item>视频教程
+             >生成订阅链接
+                </el-button>
+                <el-button
+                    style="width: 250px"
+                    type="danger"
+                    @click="makeShortUrl"
+                    :loading="loading1"
+                    :disabled="customSubUrl.length === 0"
+                 ><br>自定义配置
+                </el-button>
+                <el-button
+                    style="width: 120px"
+                    type="primary"
+                    @click="dialogLoadConfigVisible = true"
+                    icon="el-icon-copy-document"
+                    :loading="loading3"
+                >从URL解析
+                </el-button>
+              </el-form-item>
+              <el-form-item label-width="0px" style="text-align: center">
+                <el-button
+                    style="width: 250px;"
+                    type="success"
+                    icon="el-icon-video-play"
+                    @click="centerDialogVisible = true"
+                >视频教程
                 </el-button>
               </el-form-item>
             </el-form>
