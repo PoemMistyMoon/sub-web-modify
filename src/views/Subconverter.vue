@@ -193,17 +193,15 @@
                   </el-button>
                 </el-input>
               </el-form-item>
-            >生成订阅链接
-                </el-button>
+           <el-form-item label-width="0px" style="margin-top: 40px; text-align: center">
                 <el-button
-                    style="width: 120px"
+                    style="width: 250px"
                     type="danger"
-                    @click="makeShortUrl"
-                    :loading="loading1"
-                    :disabled="customSubUrl.length === 0"
-                >生成短链接
+                    @click="makeUrl"
+                    :disabled="form.sourceSubUrl.length === 0 || btnBoolean"
+                >生成订阅链接
                 </el-button>
-              </el-form-item>
+               
               <el-form-item label-width="0px" style="text-align: center">
                 <el-button
                     style="width: 120px"
